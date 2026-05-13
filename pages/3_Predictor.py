@@ -1,3 +1,4 @@
+import os
 import __main__
 import streamlit as st
 import pandas as pd
@@ -25,10 +26,11 @@ __main__.EcommercePreprocessor = EcommercePreprocessor
 # =========================
 # LOAD MODEL
 # =========================
-
-model = joblib.load(r"models\xgb_model.pkl")
-preprocessor = joblib.load(r"models\preprocessor.pkl")
-df = pd.read_excel(r"dataset\mart_product_info.xlsx")
+base_path = os.path.dirname(__file__)
+model_path = os.path.join(base_path, "..", "models", "xgb_model.pkl")
+model = joblib.load(model_path)
+preprocessor = joblib.load(os.path.join(base_path, "..", "models", "preprocessor.pkl"))
+df = pd.read_excel(os.path.join(base_path, "..", "dataset", "mart_product_info.xlsx"))
 
 # =========================
 # TITLE
