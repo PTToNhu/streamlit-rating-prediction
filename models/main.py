@@ -23,7 +23,7 @@ from collections import Counter
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import TargetEncoder
+from category_encoders import TargetEncoder
 from sklearn.decomposition import PCA
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import joblib
