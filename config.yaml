@@ -1,0 +1,14 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    dbaldwin:
+      email: tonhu@gmail.com
+      logged_in: false
+      name: To Nhu
+      password: $2b$12$E9/bCaN/r8sN/FV2l8NpgOgspUBAp7UAVU6BgsXJzp/pW8gQWCprC
+preauthorized:
+  emails:
+  - tonhu@gmail.com
