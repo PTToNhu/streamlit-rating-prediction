@@ -1,115 +1,119 @@
-## IDG Customer Churn Predictor App
 
-The IDG Customer Churn Predictor App is an interactive Streamlit application designed to predict customer churn based on provided data. This README provides comprehensive instructions on creating, deploying, and using the app.
+# Product Rating Prediction App
 
-### Table of Contents
-1. [Setup](#setup)
-2. [Running the App](#running-the-app)
-3. [Usage](#usage)
-    - [Home Page](#home-page)
-    - [Login Page](#login-page)
-    - [Data Page](#data-page)
-    - [Predictor Page](#predictor-page)
-    - [Dashboard Page](#dashboard-page)
-    - [History Page](#history-page)
-4. [Models Used](#models-used)
-5. [Deployment](#deployment)
-6. [Further Development](#further-development)
-7. [Contributing](#contributing)
-8. [License](#license)
+An interactive **Streamlit application** that predicts product ratings based on product attributes, pricing, discounts, delivery options, promotional offers, and textual descriptions.
 
-### Setup <a name="setup"></a>
+The application uses a trained **XGBoost Regressor** model to estimate the average customer rating of a product, helping users assess potential product performance before listing.
 
-1. **Clone Repository**: Clone the repository containing the Streamlit app code.
-2. **Install Dependencies**: Install the required dependencies using pip.
-3. **Data Setup**: Ensure you have a CSV dataset named `Churn Prediction Dataset.csv` placed inside a folder named `dataset` in the project directory.
-4. **Configuration**: Update the `config.yaml` file with necessary credentials and configuration details.
+**Live Demo:** [Product Rating Prediction App](https://rating-prediction-app.streamlit.app)
 
-### Running the App <a name="running-the-app"></a>
+**Source Code:** [GitHub Repository](https://github.com/PTToNhu/streamlit-rating-prediction)
 
-To run the app locally, execute the following command in the project directory:
+## Table of Contents
+1. [Application Overview](#application-overview)
+2. [Machine Learning Model](#machine-learning-model)
+3. [Model Evaluation](#model-evaluation)
+4. [Running the Application](#running-the-application)
+5. [Technologies Used](#technologies-used)
+
+## Application Overview
+
+The Streamlit application provides an interactive interface for predicting product ratings.
+
+**Key Features**
+- **Product Information Input:** Enter product attributes, including brand, category, pricing, discounts, product descriptions, delivery options, and promotional offers.
+- **Automated Preprocessing:** Applies the same preprocessing and feature engineering pipeline used during model training.
+- **Rating Prediction:** Generates an estimated product rating using the trained XGBoost Regressor.
+- **Interactive Interface:** Allows users to submit product information and view prediction results directly through a web browser.
+
+## Machine Learning Model
+
+### Prediction Task
+
+- **Problem Type:** Regression
+- **Target Variable:** Average product rating
+- **Algorithm:** XGBoost Regressor
+- **Training Data:** `mart_product_info` Data Mart
+- **Train/Test Split:** 80% training and 20% testing
+
+### Data Preprocessing & Feature Engineering
+
+Several preprocessing and feature engineering techniques were applied to transform raw product attributes into model-ready features.
+
+| Feature | Technique |
+|---|---|
+| Brand | Target Encoding |
+| Category | One-Hot Encoding + PCA (90% explained variance) |
+| Product Images & Videos | Extracted image and video counts |
+| Product Sizes | Extracted number of available sizes |
+| Discounts | Binary encoding and discount value handling |
+| Delivery Options | Extracted delivery-related features |
+| Promotional Offers | Extracted pricing and offer indicators |
+| Product Descriptions | SentenceTransformer (`all-MiniLM-L6-v2`) embeddings |
+
+Textual information from product descriptions, specifications, and details was combined and converted into numerical embeddings using SentenceTransformer.
+
+The resulting text embeddings were combined with numerical and binary features to construct the final input matrix.
+
+### Model Configuration
+
+The XGBoost Regressor was configured with the following parameters:
+
+| Parameter | Value |
+|---|---:|
+| `n_estimators` | 300 |
+| `learning_rate` | 0.05 |
+| `max_depth` | 6 |
+| `subsample` | 0.8 |
+| `colsample_bytree` | 0.8 |
+| `random_state` | 42 |
+
+The trained model and preprocessing components were saved for reuse in the Streamlit application.
+
+## Model Evaluation
+
+The model was evaluated on the held-out test set using two regression metrics:
+
+| Metric | Score |
+|---|---:|
+| RMSE | 0.5019 |
+| MAE | 0.3981 |
+
+- **MAE (Mean Absolute Error):** The model's predictions differ from actual ratings by approximately 0.3981 rating points on average.
+- **RMSE (Root Mean Squared Error):** Measures prediction errors while penalizing larger deviations more heavily.
+
+These results indicate that the model achieved relatively stable rating predictions on the test dataset.
+
+## Running the Application
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/PTToNhu/streamlit-rating-prediction.git
+cd streamlit-rating-prediction
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the Streamlit Application
 
 ```bash
 streamlit run app.py
 ```
 
-The app will start running locally and can be accessed through a web browser.
+The application will be available locally through the URL displayed in the terminal.
 
-### Usage <a name="usage"></a>
+*Note: Ensure that the trained model and required preprocessing artifacts are available in the project directory before running the application.*
 
-#### Home Page <a name="home-page"></a>
-- Provides an overview of the app and its purpose.
+## Technologies Used
 
-#### Login Page <a name="login-page"></a>
-- Existing Users: Enter your username and password to log in.
-- New Users: Create an account by providing a new username and password.
-
-#### Data Page <a name="data-page"></a>
-- Displays basic information about the dataset.
-- Shows summary statistics of numerical variables.
-- Provides the first few rows of the dataset.
-- Conducts univariate and bivariate analysis.
-- Presents additional analysis using pandas styling.
-
-#### Predictor Page <a name="predictor-page"></a>
-- Batch Prediction: Upload a CSV dataset containing customer information to predict churn.
-- Online Prediction: Input customer details interactively to predict churn.
-
-#### Dashboard Page <a name="dashboard-page"></a>
-- Provides visualizations and analytics related to customer churn.
-- Includes research questions and key performance indicators.
-- Offers insights through various charts and plots.
-
-#### History Page <a name="history-page"></a>
-- Tracks user interactions with the app.
-- Displays a history log of actions performed by the user.
-- Allows navigating back to previous points in history.
-
-### Models Used <a name="models-used"></a>
-
-#### Supported Models
-1. Support Vector Machine (SVM)
-2. XGBoost
-3. Decision Tree Model
-4. Random Forest
-
-
-
-#### Description
-- SVM: Supervised machine learning algorithm used for classification tasks.
-- XGBoost: Implementation of gradient boosted decision trees designed for speed and performance.
-
-#### Model Training
-- Data Preprocessing
-- Pipeline Creation
-- Model Training
-- Evaluation
-
-#### Model Selection
-- User Choice
-- Performance Comparison
-
-### Deployment 
-
-- Model Serialization
-- Model Loading
-
-### Further Development <a name="further-development"></a>
-
-- Model Tuning
-- Model Expansion
-- Model Monitoring
-
-### Deployment 
-
--Performed app deployment with Render
-https://idg-churn-prediction-app.onrender.com
-
-
-### Contributing <a name="contributing"></a>
-
-Contributions are welcome! If you have any suggestions, feature requests, or bug reports, please open an issue or create a pull request.
-
-### License <a name="license"></a>
-
-This project is licensed under the [Apache 2.0](LICENSE). Feel free to use, modify, and distribute the code for personal and commercial purposes.
+- **Python:** Data preprocessing, feature engineering, and model development
+- **Streamlit:** Interactive web application
+- **XGBoost:** Regression model for product rating prediction
+- **Scikit-learn:** Data preprocessing and feature transformation
+- **SentenceTransformers:** Text embedding generation
+- **Pandas & NumPy:** Data manipulation and numerical computation
